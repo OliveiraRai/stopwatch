@@ -1,42 +1,50 @@
-let initialValue = '00';
-let isRunning = false;
+let seconds = 0;
+let minutes = 0;
+let hours = 0;
 let intervalId;
+let isRunning = false;
 
-document.getElementById('stopWatch').innerHTML = initialValue;
+function formatStopWatch(num) {
+    return num < 10 ? `0${num}` : num;
+}
+
+document.getElementById('stopWatch').innerHTML = formatStopWatch(hours) + ':' + formatStopWatch(minutes) + ':' + formatStopWatch(seconds)
+
+function attStopWatch() {
+    seconds++;
+    if(seconds == 60){
+        seconds = 0;
+        minutes ++;
+        if(minutes == 60) {
+            minutes = 0;
+            hours++;
+            if(hours == 24) {
+                hours = 0;
+                minutes = 0;
+                seconds = 0;
+            }
+        }
+    }
+
+    document.getElementById('stopWatch').innerHTML = formatStopWatch(hours) + ':' + formatStopWatch(minutes) + ':' + formatStopWatch(seconds)
+}
 
 function start() {
-    if(isRunning) return;
-
-    document.getElementById("startBtn").style.display = "none";
-    document.getElementById("pauseBtn").style.display = "inline";
-
-    intervalId = setInterval(() => {
-        initialValue = (parseInt(initialValue) + 1).toString().padStart(2, '0')
-        document.getElementById("stopWatch").innerHTML = initialValue;
-
-        if(initialValue == "99"){
-            initialValue = '00'
-        }
-    }, 1000)
-
-    isRunning = true;
-}
+    if (!intervalId) {
+        intervalId = setInterval(attStopWatch, 1000);
+    }
+};
 
 function pause() {
     clearInterval(intervalId)
-    isRunning = false;
-    
-    document.getElementById("startBtn").style.display = "inline";
-    document.getElementById("pauseBtn").style.display = "none";
+    intervalId = null;
 }
 
 function reset() {
     clearInterval(intervalId)
-    initialValue = '00';
-
-    document.getElementById("stopWatch").innerHTML = initialValue;
-    document.getElementById("startBtn").style.display = "inline";
-    document.getElementById("pauseBtn").style.display = "inline";
-
-    isRunning = false;
+    intervalId = null
+    hours = 0;
+    minutes = 0;
+    seconds = 0;
+    document.getElementById('stopWatch').innerHTML = formatStopWatch(hours) + ':' + formatStopWatch(minutes) + ':' + formatStopWatch(seconds)
 }
