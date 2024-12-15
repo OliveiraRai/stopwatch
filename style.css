@@ -60,3 +60,10 @@ body {
     background-color: #092e7d;
 }
 
+/* responsivity */
+
+@media (max-width: 400px) {
+    #mainContainer {
+        width: 100%;
+    }
+}
